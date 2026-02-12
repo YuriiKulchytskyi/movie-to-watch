@@ -1,0 +1,13 @@
+.list{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+
+    li{
+        border: 1px solid black;
+        flex-wrap: nowrap;
+    }
+}
