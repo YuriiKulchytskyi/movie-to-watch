@@ -1,13 +1,17 @@
-import { createSlice} from "@reduxjs/toolkit";
-import { fetchMoviesByQuery, fetchMoviesByGanre } from "./moviesOperations";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchMoviesByQuery,
+  fetchMoviesByGanre,
+  fetchSelectedGenre,
+} from "./moviesOperations";
 import type { Genre, Movie } from "../../types/movie";
-
 
 interface MovieState {
   movies: Movie[];
   genres: Genre[];
   loading: boolean;
   error: string | null;
+  selectedGenreMovies: Movie[];
 }
 
 const initialState: MovieState = {
@@ -15,6 +19,7 @@ const initialState: MovieState = {
   genres: [],
   loading: false,
   error: null,
+  selectedGenreMovies: [],
 };
 
 export const movieSlice = createSlice({
@@ -33,36 +38,46 @@ export const movieSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        fetchMoviesByQuery.fulfilled,
-        (state, action) => {
-          state.loading = false;
-          state.movies = action.payload.results;
-          state.error = null;
-          console.log(state.movies);
-          
-        },
-      )
+      .addCase(fetchMoviesByQuery.fulfilled, (state, action) => {
+        state.loading = false;
+        state.movies = action.payload.results;
+        state.error = null;
+        console.log(state.movies);
+      })
       .addCase(fetchMoviesByQuery.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ? action.payload.error : "Unknown error";
-      }).addCase(fetchMoviesByGanre.pending, (state) => {
+      })
+      .addCase(fetchMoviesByGanre.pending, (state) => {
         state.loading = true;
-        state.error = null
-      }).addCase(fetchMoviesByGanre.fulfilled, (state, action) => {
+        state.error = null;
+      })
+      .addCase(fetchMoviesByGanre.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.genres = action.payload;
-        // console.log(action.payload);
-        
       })
       .addCase(fetchMoviesByGanre.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.error : "Unknown error"
+        state.error = action.payload ? action.payload.error : "Unknown error";
       })
+      .addCase(fetchSelectedGenre.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSelectedGenre.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.selectedGenreMovies = action.payload.results;
+        console.log(state.selectedGenreMovies);
+        
+      })
+      .addCase(fetchSelectedGenre.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ? action.payload.error : "Unknown error";
+      });
   },
 });
 
-
 export const { clearMovies } = movieSlice.actions;
-export const movieReducer = movieSlice.reducer
+export const movieReducer = movieSlice.reducer;

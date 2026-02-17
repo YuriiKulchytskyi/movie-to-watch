@@ -10,7 +10,7 @@ export interface Movie {
   popularity?: number;
   poster_path?: string;
   video?: boolean;
-  vote_avarage?: number;
+  vote_average?: number;
   vote_count?: number;
 }
 
