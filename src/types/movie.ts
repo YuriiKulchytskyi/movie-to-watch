@@ -2,7 +2,6 @@ export interface Movie {
   id: number;
   title?: string;
   release_date?: string;
-  // description?: string;
   original_title?: string;
   adult?: boolean;
   original_language?: string;
@@ -12,6 +11,13 @@ export interface Movie {
   video?: boolean;
   vote_average?: number;
   vote_count?: number;
+  tagline?: string;
+  runtime?: number;
+  status?: string;
+  budget?: number | null | undefined;
+  revenue?: number | null | undefined;
+  homepage?: string;
+  genres: Genre[];
 }
 
 export interface Genre {

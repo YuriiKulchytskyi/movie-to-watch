@@ -3,10 +3,12 @@ import {
   fetchMoviesByQuery,
   fetchMoviesByGanre,
   fetchSelectedGenre,
+  fetchMovieById,
 } from "./moviesOperations";
 import type { Genre, Movie } from "../../types/movie";
 
 interface MovieState {
+  movie: Movie | null;
   movies: Movie[];
   genres: Genre[];
   loading: boolean;
@@ -15,6 +17,7 @@ interface MovieState {
 }
 
 const initialState: MovieState = {
+  movie: null,
   movies: [],
   genres: [],
   loading: false,
@@ -31,6 +34,9 @@ export const movieSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    clearSelectedMovie(state) {
+      state.movie = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -70,14 +76,28 @@ export const movieSlice = createSlice({
         state.error = null;
         state.selectedGenreMovies = action.payload.results;
         console.log(state.selectedGenreMovies);
-        
       })
       .addCase(fetchSelectedGenre.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ? action.payload.error : "Unknown error";
-      });
+      })
+      .addCase(fetchMovieById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMovieById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.movie = action.payload;
+        console.log(state.movie);
+        
+      }).addCase(fetchMovieById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ? action.payload.error: "Unknown error";
+        state.movie = null;
+      })
   },
 });
 
-export const { clearMovies } = movieSlice.actions;
+export const { clearMovies, clearSelectedMovie } = movieSlice.actions;
 export const movieReducer = movieSlice.reducer;
