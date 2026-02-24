@@ -2,7 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { Genre, Movie, MoviesResponse } from "../../types/movie";
 
-axios.defaults.baseURL = "https://api.themoviedb.org/3";
+const API_URL = import.meta.env.VITE_TMDB_API_URL;
+const BEARER_TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN;
+
+axios.defaults.baseURL = API_URL;
 
 type FetchMoviesArg = {
   query: string;
@@ -25,8 +28,7 @@ export const fetchMoviesByQuery = createAsyncThunk<
     const response = await axios.get("/search/movie", {
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZmQ5ODc5ZjRmZGVjZDMwZGRkZDZhNWIzNDVjODE4OCIsIm5iZiI6MTcwMTAwMjc4NC4wNDksInN1YiI6IjY1NjMzZTIwMjQ0MTgyMDEyZGFjMDY0YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0Nh70y02dN9yvJ578_1C027Z2zZPUX-dN0Z8a6EEsC0",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
       },
       params: {
         query,
@@ -52,8 +54,7 @@ export const fetchMoviesByGanre = createAsyncThunk<
     const response = await axios.get("/genre/movie/list", {
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZmQ5ODc5ZjRmZGVjZDMwZGRkZDZhNWIzNDVjODE4OCIsIm5iZiI6MTcwMTAwMjc4NC4wNDksInN1YiI6IjY1NjMzZTIwMjQ0MTgyMDEyZGFjMDY0YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0Nh70y02dN9yvJ578_1C027Z2zZPUX-dN0Z8a6EEsC0",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
     return response.data.genres;
@@ -79,8 +80,7 @@ export const fetchSelectedGenre = createAsyncThunk<
       },
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZmQ5ODc5ZjRmZGVjZDMwZGRkZDZhNWIzNDVjODE4OCIsIm5iZiI6MTcwMTAwMjc4NC4wNDksInN1YiI6IjY1NjMzZTIwMjQ0MTgyMDEyZGFjMDY0YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0Nh70y02dN9yvJ578_1C027Z2zZPUX-dN0Z8a6EEsC0",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
     return response.data;
@@ -98,20 +98,21 @@ export const fetchMovieById = createAsyncThunk<
   Movie,
   FetchMovieIdArg,
   { rejectValue: FetchMovieError }
->("movies/fetchMovieById", async ({id}, thunkAPI) => {
+>("movies/fetchMovieById", async ({ id }, thunkAPI) => {
   try {
     const response = await axios.get(`/movie/${id}`, {
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZmQ5ODc5ZjRmZGVjZDMwZGRkZDZhNWIzNDVjODE4OCIsIm5iZiI6MTcwMTAwMjc4NC4wNDksInN1YiI6IjY1NjMzZTIwMjQ0MTgyMDEyZGFjMDY0YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0Nh70y02dN9yvJ578_1C027Z2zZPUX-dN0Z8a6EEsC0",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
-    return response.data
+    return response.data;
   } catch (error) {
-    if(axios.isAxiosError(error)) {
-      return thunkAPI.rejectWithValue({error: `Failed with error: ${error.message}`})
+    if (axios.isAxiosError(error)) {
+      return thunkAPI.rejectWithValue({
+        error: `Failed with error: ${error.message}`,
+      });
     }
-    return thunkAPI.rejectWithValue({error: "Unknown error"})
+    return thunkAPI.rejectWithValue({ error: "Unknown error" });
   }
 });
