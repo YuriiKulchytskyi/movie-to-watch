@@ -25,6 +25,7 @@ const initialState: MovieState = {
   selectedGenreMovies: [],
 };
 
+
 export const movieSlice = createSlice({
   name: "movies",
   initialState,

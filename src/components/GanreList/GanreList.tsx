@@ -6,7 +6,7 @@ import {
   fetchMoviesByGanre,
   fetchSelectedGenre,
 } from "../../redux/movies/moviesOperations";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export const GenreList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,6 +17,7 @@ export const GenreList = () => {
   }, [dispatch]);
 
   const handleClick = (genreId: number): void => {
+
     dispatch(fetchSelectedGenre(genreId));
   };
 
@@ -25,8 +26,7 @@ export const GenreList = () => {
       <ul className="list">
         {genreList.map((genre) => (
           <li key={genre.id} onClick={() => handleClick(genre.id)}>
-            <a href={`genres/${genre.id}`}>{genre.name}</a>
-            {/* {genre.name} */}
+            <Link to={`/genres/${genre.id}`}>{genre.name}</Link>
           </li>
         ))}
       </ul>

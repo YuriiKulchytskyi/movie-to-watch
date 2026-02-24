@@ -18,6 +18,7 @@ export interface Movie {
   revenue?: number | null | undefined;
   homepage?: string;
   genres: Genre[];
+  backdrop_path?: string;
 }
 
 export interface Genre {

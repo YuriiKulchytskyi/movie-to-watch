@@ -1,23 +1,23 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedMovie } from "../redux/movies/moviesSlice";
 import "./MoviePage.scss";
+import { formatedDate } from "../utils/formatedDate";
+import { useEffect } from "react";
+import { fetchMovieById } from "../redux/movies/moviesOperations";
 
 export const MoviePage = () => {
   const movie = useSelector((state: RootState) => state.movies.movie);
+  const { movieId } = useParams<{ movieId: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString || dateString.trim() === "") return "Unknown release date";
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  useEffect(() => {
+    if (movieId && !movie) {
+      dispatch(fetchMovieById({ id: Number(movieId) }));
+    }
+  }, [dispatch, movieId, movie]);
 
   if (!movie) return <p className="loading">Loading movie...</p>;
 
@@ -50,7 +50,7 @@ export const MoviePage = () => {
             <strong>Overview:</strong> {movie.overview}
           </p>
           <p>
-            <strong>Release Date:</strong> {formatDate(movie.release_date)}
+            <strong>Release Date:</strong> {formatedDate(movie.release_date)}
           </p>
           <p>
             <strong>Runtime:</strong> {movie.runtime} min
