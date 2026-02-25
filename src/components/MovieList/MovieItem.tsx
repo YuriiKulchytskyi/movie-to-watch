@@ -1,6 +1,3 @@
-import { useDispatch } from "react-redux";
-import { fetchMovieById } from "../../redux/movies/moviesOperations";
-import type { AppDispatch } from "../../redux/store";
 import { useNavigate } from "react-router";
 import type { Movie } from "../../types/movie";
 import { formatedDate } from "../../utils/formatedDate";
@@ -8,14 +5,12 @@ import { formatedDate } from "../../utils/formatedDate";
 
 export const MovieItem = ({item}: {item: Movie}) => {
 
-    const dispatch = useDispatch<AppDispatch>()
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
   return <li key={item.id}>
             <div
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(fetchMovieById({id: item.id}));
                 navigate(`/movie/${item.id}`);
               }}
             >

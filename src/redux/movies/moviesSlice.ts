@@ -4,6 +4,7 @@ import {
   fetchMoviesByGanre,
   fetchSelectedGenre,
   fetchMovieById,
+  fetchPopularMovies,
 } from "./moviesOperations";
 import type { Genre, Movie } from "../../types/movie";
 
@@ -14,6 +15,7 @@ interface MovieState {
   loading: boolean;
   error: string | null;
   selectedGenreMovies: Movie[];
+  popular: Movie[];
 }
 
 const initialState: MovieState = {
@@ -23,6 +25,7 @@ const initialState: MovieState = {
   loading: false,
   error: null,
   selectedGenreMovies: [],
+  popular: []
 };
 
 
@@ -49,7 +52,6 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.movies = action.payload.results;
         state.error = null;
-        console.log(state.movies);
       })
       .addCase(fetchMoviesByQuery.rejected, (state, action) => {
         state.loading = false;
@@ -76,7 +78,6 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.selectedGenreMovies = action.payload.results;
-        console.log(state.selectedGenreMovies);
       })
       .addCase(fetchSelectedGenre.rejected, (state, action) => {
         state.loading = false;
@@ -90,12 +91,23 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.movie = action.payload;
-        console.log(state.movie);
         
       }).addCase(fetchMovieById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ? action.payload.error: "Unknown error";
         state.movie = null;
+      }).addCase(fetchPopularMovies.pending, state => {
+        state.loading = true;
+        state.error = null;
+      }).addCase(fetchPopularMovies.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.popular = action.payload;
+        
+      }).addCase(fetchPopularMovies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ? action.payload.error : 'Unknown error';
+        state.popular = [];
       })
   },
 });

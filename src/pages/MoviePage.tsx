@@ -13,13 +13,15 @@ export const MoviePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    if (movieId && !movie) {
-      dispatch(fetchMovieById({ id: Number(movieId) }));
-    }
-  }, [dispatch, movieId, movie]);
+ useEffect(() => {
+  if (movieId) {
+    dispatch(fetchMovieById({ id: Number(movieId) }));
+  }
+}, [dispatch, movieId]);
 
   if (!movie) return <p className="loading">Loading movie...</p>;
+  console.log(movie);
+  
 
   return (
     <div className="movie-page">

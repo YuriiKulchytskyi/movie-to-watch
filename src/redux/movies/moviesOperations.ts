@@ -106,6 +106,8 @@ export const fetchMovieById = createAsyncThunk<
         Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
+    console.log('Fetched Movie', id);
+    
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -116,3 +118,28 @@ export const fetchMovieById = createAsyncThunk<
     return thunkAPI.rejectWithValue({ error: "Unknown error" });
   }
 });
+
+export const fetchPopularMovies = createAsyncThunk<
+  Movie[],
+  void,
+  { rejectValue: FetchMovieError }
+>("movies/fetchPopularMovies", async (_, thunkAPI) => {
+  try {
+    const response = await axios.get("/movie/popular", {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return thunkAPI.rejectWithValue({
+        error: `Feiled with error: ${error.message}`,
+      });
+    }
+    return thunkAPI.rejectWithValue({ error: "Unknown error" });
+  }
+});
+
+
