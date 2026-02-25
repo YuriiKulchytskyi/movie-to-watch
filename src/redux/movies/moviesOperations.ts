@@ -106,7 +106,7 @@ export const fetchMovieById = createAsyncThunk<
         Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
-    console.log('Fetched Movie', id);
+    // console.log('Fetched Movie', id);
     
     return response.data;
   } catch (error) {

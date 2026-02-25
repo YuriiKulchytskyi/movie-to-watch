@@ -25,9 +25,8 @@ const initialState: MovieState = {
   loading: false,
   error: null,
   selectedGenreMovies: [],
-  popular: []
+  popular: [],
 };
-
 
 export const movieSlice = createSlice({
   name: "movies",
@@ -40,7 +39,7 @@ export const movieSlice = createSlice({
     },
     clearSelectedMovie(state) {
       state.movie = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -91,24 +90,26 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.movie = action.payload;
-        
-      }).addCase(fetchMovieById.rejected, (state, action) => {
+      })
+      .addCase(fetchMovieById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.error: "Unknown error";
+        state.error = action.payload ? action.payload.error : "Unknown error";
         state.movie = null;
-      }).addCase(fetchPopularMovies.pending, state => {
+      })
+      .addCase(fetchPopularMovies.pending, (state) => {
         state.loading = true;
         state.error = null;
-      }).addCase(fetchPopularMovies.fulfilled, (state, action) => {
+      })
+      .addCase(fetchPopularMovies.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.popular = action.payload;
-        
-      }).addCase(fetchPopularMovies.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ? action.payload.error : 'Unknown error';
-        state.popular = [];
       })
+      .addCase(fetchPopularMovies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ? action.payload.error : "Unknown error";
+        state.popular = [];
+      });
   },
 });
 

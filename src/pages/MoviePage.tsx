@@ -8,20 +8,20 @@ import { useEffect } from "react";
 import { fetchMovieById } from "../redux/movies/moviesOperations";
 
 export const MoviePage = () => {
-  const movie = useSelector((state: RootState) => state.movies.movie);
   const { movieId } = useParams<{ movieId: string }>();
+  console.log(movieId, "Some text");
+
+  const movie = useSelector((state: RootState) => state.movies.movie);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
- useEffect(() => {
-  if (movieId) {
-    dispatch(fetchMovieById({ id: Number(movieId) }));
-  }
-}, [dispatch, movieId]);
+  useEffect(() => {
+    if (movieId) {
+      dispatch(fetchMovieById({ id: Number(movieId) }));
+    }
+  }, [dispatch, movieId]);
 
   if (!movie) return <p className="loading">Loading movie...</p>;
-  console.log(movie);
-  
 
   return (
     <div className="movie-page">
@@ -89,7 +89,7 @@ export const MoviePage = () => {
         </div>
       </div>
 
-      {movie.backdrop_path && (
+      {/* {movie.backdrop_path && (
         <div className="movie-backdrop">
           <img
             src={`https://image.tmdb.org/t/p/w780${movie.backdrop_path}`}
@@ -97,7 +97,7 @@ export const MoviePage = () => {
             loading="lazy"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
