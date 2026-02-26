@@ -1,23 +1,28 @@
-import { useNavigate, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import type { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedMovie } from "../redux/movies/moviesSlice";
 import "./MoviePage.scss";
 import { formatedDate } from "../utils/formatedDate";
 import { useEffect } from "react";
-import { fetchMovieById } from "../redux/movies/moviesOperations";
+import {
+  fetchMovieById,
+  fetchSimilarMovies,
+} from "../redux/movies/moviesOperations";
+import { MovieItem } from "../components/MovieList/MovieItem";
 
 export const MoviePage = () => {
   const { movieId } = useParams<{ movieId: string }>();
   console.log(movieId, "Some text");
 
   const movie = useSelector((state: RootState) => state.movies.movie);
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const similar = useSelector((state: RootState) => state.movies.similar);
 
   useEffect(() => {
     if (movieId) {
       dispatch(fetchMovieById({ id: Number(movieId) }));
+      dispatch(fetchSimilarMovies({ id: Number(movieId) }));
     }
   }, [dispatch, movieId]);
 
@@ -25,15 +30,15 @@ export const MoviePage = () => {
 
   return (
     <div className="movie-page">
-      <button
+      <Link
+        to={"/"}
         className="go-back"
         onClick={() => {
-          navigate(-1);
           dispatch(clearSelectedMovie());
         }}
       >
         ← Go Back
-      </button>
+      </Link>
 
       <div className="movie-header">
         {movie.poster_path && (
@@ -98,6 +103,12 @@ export const MoviePage = () => {
           />
         </div>
       )} */}
+
+      <ul className="similar-list">
+        {similar.map((movie) => (
+          <MovieItem key={movie.id} item={movie} />
+        ))}
+      </ul>
     </div>
   );
 };

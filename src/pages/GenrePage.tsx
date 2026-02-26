@@ -9,7 +9,7 @@ export const GenrePage = () => {
   const { genreId } = useParams<{ genreId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const movies = useSelector(
-    (state: RootState) => state.movies.selectedGenreMovies
+    (state: RootState) => state.movies.selectedGenreMovies,
   );
 
   useEffect(() => {
@@ -20,4 +20,3 @@ export const GenrePage = () => {
 
   return <MovieList movies={movies} />;
 };
-

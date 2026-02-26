@@ -7,9 +7,6 @@ const BEARER_TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN;
 
 axios.defaults.baseURL = API_URL;
 
-type FetchMoviesArg = {
-  query: string;
-};
 
 type FetchMovieError = {
   error: string;
@@ -19,6 +16,9 @@ type FetchMovieIdArg = {
   id: number;
 };
 
+type FetchMoviesArg = {
+  query: string;
+};
 export const fetchMoviesByQuery = createAsyncThunk<
   MoviesResponse,
   FetchMoviesArg,
@@ -107,7 +107,7 @@ export const fetchMovieById = createAsyncThunk<
       },
     });
     // console.log('Fetched Movie', id);
-    
+
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -142,4 +142,25 @@ export const fetchPopularMovies = createAsyncThunk<
   }
 });
 
-
+export const fetchSimilarMovies = createAsyncThunk<
+  Movie[],
+  FetchMovieIdArg,
+  { rejectValue: FetchMovieError }
+>("movies/fetchSimilarMovies", async ({ id }, thunkAPI) => {
+  try {
+    const response = await axios.get(`/movie/${id}/similar`, {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${BEARER_TOKEN}`,
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return thunkAPI.rejectWithValue({
+        error: `Failed with error: ${error.message}`,
+      });
+    }
+    return thunkAPI.rejectWithValue({ error: "Unknown error" });
+  }
+});

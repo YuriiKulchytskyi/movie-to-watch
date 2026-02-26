@@ -5,6 +5,7 @@ import {
   fetchSelectedGenre,
   fetchMovieById,
   fetchPopularMovies,
+  fetchSimilarMovies,
 } from "./moviesOperations";
 import type { Genre, Movie } from "../../types/movie";
 
@@ -16,6 +17,7 @@ interface MovieState {
   error: string | null;
   selectedGenreMovies: Movie[];
   popular: Movie[];
+  similar: Movie[];
 }
 
 const initialState: MovieState = {
@@ -26,6 +28,7 @@ const initialState: MovieState = {
   error: null,
   selectedGenreMovies: [],
   popular: [],
+  similar: [],
 };
 
 export const movieSlice = createSlice({
@@ -39,6 +42,7 @@ export const movieSlice = createSlice({
     },
     clearSelectedMovie(state) {
       state.movie = null;
+      state.similar = []
     },
   },
   extraReducers: (builder) => {
@@ -109,7 +113,22 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.error = action.payload ? action.payload.error : "Unknown error";
         state.popular = [];
-      });
+      })
+      .addCase(fetchSimilarMovies.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSimilarMovies.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload? action.payload.error : "Unknown error"
+      }).addCase(fetchSimilarMovies.fulfilled, (state, action) => {
+        state.error = null;
+        state.loading = false;
+        state.similar = action.payload.splice(0,4);
+        console.log(state.similar);
+        
+      })
+
   },
 });
 

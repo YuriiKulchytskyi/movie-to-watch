@@ -4,20 +4,21 @@ import { useDispatch } from "react-redux";
 import { fetchMoviesByQuery } from "../redux/movies/moviesOperations";
 import { Outlet, useNavigate } from "react-router-dom";
 import { GenreList } from "../components/GanreList/GanreList";
+// import { Filter } from "../components/Filter/Filter";
 
 export const Layout = () => {
   const [query, setQuery] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
- const handleSearch = (): void => {
-  if (query.trim()) {
-    navigate("/search");
-    dispatch(fetchMoviesByQuery({ query }));
-    setQuery("");
-  }
-};
+  const handleSearch = (): void => {
+    if (query.trim()) {
+      navigate("/search");
+      dispatch(fetchMoviesByQuery({ query }));
+      setQuery("");
+    }
+  };
 
   return (
     <div>
@@ -34,7 +35,8 @@ export const Layout = () => {
         type="text"
       />
       <button onClick={handleSearch}>Search</button>
-        <GenreList />
+      {/* <Filter /> */}
+      <GenreList />
       <main>
         <Outlet />
       </main>
