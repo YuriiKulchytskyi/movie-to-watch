@@ -25,7 +25,7 @@ export const fetchMoviesByQuery = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchMoviesByQuery", async ({ query }, thunkAPI) => {
   try {
-    const response = await axios.get("/search/movie", {
+    const response = await axios.get(`${API_URL}/search/movie`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
@@ -51,7 +51,7 @@ export const fetchMoviesByGanre = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchMoviesByGanre", async (_, thunkAPI) => {
   try {
-    const response = await axios.get("/genre/movie/list", {
+    const response = await axios.get(`${API_URL}/genre/movie/list`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
@@ -74,7 +74,7 @@ export const fetchSelectedGenre = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchSelectedGenre", async (genreId, thunkAPI) => {
   try {
-    const response = await axios.get("/discover/movie", {
+    const response = await axios.get(`${API_URL}/discover/movie`, {
       params: {
         with_genres: genreId,
       },
@@ -100,7 +100,7 @@ export const fetchMovieById = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchMovieById", async ({ id }, thunkAPI) => {
   try {
-    const response = await axios.get(`/movie/${id}`, {
+    const response = await axios.get(`${API_URL}/movie/${id}`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
@@ -125,7 +125,7 @@ export const fetchPopularMovies = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchPopularMovies", async (_, thunkAPI) => {
   try {
-    const response = await axios.get("/movie/popular", {
+    const response = await axios.get(`${API_URL}/movie/popular`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
@@ -148,7 +148,7 @@ export const fetchSimilarMovies = createAsyncThunk<
   { rejectValue: FetchMovieError }
 >("movies/fetchSimilarMovies", async ({ id }, thunkAPI) => {
   try {
-    const response = await axios.get(`/movie/${id}/similar`, {
+    const response = await axios.get(`${API_URL}/movie/${id}/similar`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,

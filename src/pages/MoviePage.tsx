@@ -12,19 +12,19 @@ import {
 import { MovieItem } from "../components/MovieList/MovieItem";
 
 export const MoviePage = () => {
-  const { movieId } = useParams<{ movieId: string }>();
-  console.log(movieId, "Some text");
+  const { id } = useParams<{ id: string }>();
+  console.log(id, "Some text");
 
   const movie = useSelector((state: RootState) => state.movies.movie);
   const dispatch = useDispatch<AppDispatch>();
   const similar = useSelector((state: RootState) => state.movies.similar);
 
   useEffect(() => {
-    if (movieId) {
-      dispatch(fetchMovieById({ id: Number(movieId) }));
-      dispatch(fetchSimilarMovies({ id: Number(movieId) }));
+    if (id) {
+      dispatch(fetchMovieById({ id: Number(id) }));
+      dispatch(fetchSimilarMovies({ id: Number(id) }));
     }
-  }, [dispatch, movieId]);
+  }, [dispatch, id]);
 
   if (!movie) return <p className="loading">Loading movie...</p>;
 

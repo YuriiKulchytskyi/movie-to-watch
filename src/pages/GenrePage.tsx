@@ -6,17 +6,17 @@ import { useParams } from "react-router";
 import { MovieList } from "../components/MovieList/MovieList";
 
 export const GenrePage = () => {
-  const { genreId } = useParams<{ genreId: string }>();
+  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const movies = useSelector(
     (state: RootState) => state.movies.selectedGenreMovies,
   );
 
   useEffect(() => {
-    if (genreId) {
-      dispatch(fetchSelectedGenre(Number(genreId)));
+if (id) {
+      dispatch(fetchSelectedGenre(Number(id)));
     }
-  }, [dispatch, genreId]);
+  }, [dispatch, id]);
 
   return <MovieList movies={movies} />;
 };
