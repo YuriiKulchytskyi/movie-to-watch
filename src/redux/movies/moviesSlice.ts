@@ -18,6 +18,9 @@ interface MovieState {
   selectedGenreMovies: Movie[];
   popular: Movie[];
   similar: Movie[];
+  totalPages: number;
+  currentPage: number;
+  lastQuery: string;
 }
 
 const initialState: MovieState = {
@@ -29,6 +32,9 @@ const initialState: MovieState = {
   selectedGenreMovies: [],
   popular: [],
   similar: [],
+  totalPages: 0,
+  currentPage: 1,
+  lastQuery: "",
 };
 
 export const movieSlice = createSlice({
@@ -42,7 +48,12 @@ export const movieSlice = createSlice({
     },
     clearSelectedMovie(state) {
       state.movie = null;
-      state.similar = []
+      state.similar = [];
+    },
+    clearSelectedGenreMovies(state) {
+      state.selectedGenreMovies = [];
+      state.currentPage = 1;
+      state.totalPages = 0;
     },
   },
   extraReducers: (builder) => {
@@ -53,8 +64,11 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchMoviesByQuery.fulfilled, (state, action) => {
         state.loading = false;
-        state.movies = action.payload.results;
+        state.movies = [...state.movies, ...action.payload.results];
         state.error = null;
+        state.totalPages = action.payload.total_pages;
+        state.currentPage += 1;
+        state.lastQuery = action.meta.arg.query;
       })
       .addCase(fetchMoviesByQuery.rejected, (state, action) => {
         state.loading = false;
@@ -80,7 +94,18 @@ export const movieSlice = createSlice({
       .addCase(fetchSelectedGenre.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.selectedGenreMovies = action.payload.results;
+
+        const newMovies = action.payload.results.filter(
+          (m) => !state.selectedGenreMovies.some((old) => old.id === m.id),
+        );
+
+        state.selectedGenreMovies = [
+          ...state.selectedGenreMovies,
+          ...newMovies,
+        ];
+
+        state.currentPage += 1;
+        state.totalPages = action.payload.total_pages;
       })
       .addCase(fetchSelectedGenre.rejected, (state, action) => {
         state.loading = false;
@@ -107,7 +132,14 @@ export const movieSlice = createSlice({
       .addCase(fetchPopularMovies.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.popular = action.payload;
+
+        const newMovies = action.payload.results.filter(
+          (m) => !state.popular.some((old) => old.id === m.id),
+        );
+
+        state.popular = [...state.popular, ...newMovies];
+        state.totalPages = action.payload.total_pages;
+        state.currentPage += 1;
       })
       .addCase(fetchPopularMovies.rejected, (state, action) => {
         state.loading = false;
@@ -120,17 +152,16 @@ export const movieSlice = createSlice({
       })
       .addCase(fetchSimilarMovies.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload? action.payload.error : "Unknown error"
-      }).addCase(fetchSimilarMovies.fulfilled, (state, action) => {
+        state.error = action.payload ? action.payload.error : "Unknown error";
+      })
+      .addCase(fetchSimilarMovies.fulfilled, (state, action) => {
         state.error = null;
         state.loading = false;
-        state.similar = action.payload.splice(0,4);
+        state.similar = action.payload.slice(0, 4);
         console.log(state.similar);
-        
-      })
-
+      });
   },
 });
 
-export const { clearMovies, clearSelectedMovie } = movieSlice.actions;
+export const { clearMovies, clearSelectedMovie, clearSelectedGenreMovies } = movieSlice.actions;
 export const movieReducer = movieSlice.reducer;

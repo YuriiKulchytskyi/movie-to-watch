@@ -7,7 +7,6 @@ const BEARER_TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN;
 
 axios.defaults.baseURL = API_URL;
 
-
 type FetchMovieError = {
   error: string;
 };
@@ -18,12 +17,18 @@ type FetchMovieIdArg = {
 
 type FetchMoviesArg = {
   query: string;
+  page?: number;
 };
+
+type FetchPopArg ={
+   page?: number;
+}
+
 export const fetchMoviesByQuery = createAsyncThunk<
   MoviesResponse,
   FetchMoviesArg,
   { rejectValue: FetchMovieError }
->("movies/fetchMoviesByQuery", async ({ query }, thunkAPI) => {
+>("movies/fetchMoviesByQuery", async ({ query, page = 1 }, thunkAPI) => {
   try {
     const response = await axios.get(`${API_URL}/search/movie`, {
       headers: {
@@ -32,10 +37,11 @@ export const fetchMoviesByQuery = createAsyncThunk<
       },
       params: {
         query,
+        page,
       },
     });
     return response.data;
-  } catch (error: unknown) {
+  } catch (error) {
     if (axios.isAxiosError(error)) {
       return thunkAPI.rejectWithValue({
         error: `Failed to fetch movies by query: ${error.message}`,
@@ -70,13 +76,14 @@ export const fetchMoviesByGanre = createAsyncThunk<
 
 export const fetchSelectedGenre = createAsyncThunk<
   MoviesResponse,
-  number,
+  {genreId: number; page?: number },
   { rejectValue: FetchMovieError }
->("movies/fetchSelectedGenre", async (genreId, thunkAPI) => {
+>("movies/fetchSelectedGenre", async ({genreId, page = 1}, thunkAPI) => {
   try {
     const response = await axios.get(`${API_URL}/discover/movie`, {
       params: {
         with_genres: genreId,
+        page,
       },
       headers: {
         accept: "application/json",
@@ -106,7 +113,6 @@ export const fetchMovieById = createAsyncThunk<
         Authorization: `Bearer ${BEARER_TOKEN}`,
       },
     });
-    // console.log('Fetched Movie', id);
 
     return response.data;
   } catch (error) {
@@ -120,18 +126,21 @@ export const fetchMovieById = createAsyncThunk<
 });
 
 export const fetchPopularMovies = createAsyncThunk<
-  Movie[],
-  void,
+  MoviesResponse,
+  FetchPopArg,
   { rejectValue: FetchMovieError }
->("movies/fetchPopularMovies", async (_, thunkAPI) => {
+>("movies/fetchPopularMovies", async ({ page = 1 }, thunkAPI) => {
   try {
     const response = await axios.get(`${API_URL}/movie/popular`, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${BEARER_TOKEN}`,
       },
+      params: {
+        page,
+      },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return thunkAPI.rejectWithValue({

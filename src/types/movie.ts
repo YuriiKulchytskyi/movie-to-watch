@@ -29,5 +29,7 @@ export interface Genre {
 
 
 export interface MoviesResponse {
-    results: Movie[]
+    results: Movie[];
+    total_pages: number;
+    current_page: number;
 }
