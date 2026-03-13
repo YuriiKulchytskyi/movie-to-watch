@@ -4,6 +4,8 @@ import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
 import { MoviePage } from "./pages/MoviePage";
 import { GenrePage } from "./pages/GenrePage";
+import { AuthPage } from "./pages/AuthPage";
+import { LoginPage } from "./pages/LoginPage";
 
 export const router = createBrowserRouter(
   [
@@ -15,6 +17,9 @@ export const router = createBrowserRouter(
         { path: "search", element: <SearchPage /> },
         { path: "movie/:id", element: <MoviePage /> },
         { path: "genres/:id", element: <GenrePage /> },
+        { path: "auth", element: <AuthPage /> },
+        { path: "login", element: <LoginPage /> },
+        { path: "*", element: <h1>404 Not Found</h1> },
       ],
     },
   ],
