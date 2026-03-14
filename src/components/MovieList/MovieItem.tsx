@@ -1,9 +1,26 @@
 import { useNavigate } from "react-router";
 import type { Movie } from "../../types/movie";
 import { formatedDate } from "../../utils/formatedDate";
+import { useEffect, useState } from "react";
+import { removeFromFavorites } from "../../utils/removeFromFavorites";
+import { addToFavorites } from "../../utils/addToFavorite";
 
-export const MovieItem = ({ item }: { item: Movie }) => {
+export const MovieItem = ({
+  item,
+}: {
+  item: Movie;
+}) => {
+  const [favorite, setFavorite] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkFavorite = async () => {
+      const { isFavorite } = await import("../../utils/isFavorite");
+      const result = await isFavorite(item.id);
+      setFavorite(result);
+    }
+    checkFavorite();
+  },[item.id]);
 
   return (
     <li key={item.id}>
@@ -22,13 +39,23 @@ export const MovieItem = ({ item }: { item: Movie }) => {
           loading="lazy"
         />
         <div>
-          {/* <p className="overview">{item.overview}</p> */}
           <p>{formatedDate(item.release_date)}</p>
-          {/* <div>
-            <p>{item.vote_average}</p>
-            <p>{item.vote_count}</p>
-          </div> */}
         </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+
+            if (favorite) {
+              removeFromFavorites(item);
+              setFavorite(false);
+            } else {
+              addToFavorites(item);
+              setFavorite(true);
+            }
+          }}
+        >
+          {favorite ? "Remove from Watchlist" : "Add to Watchlist"}
+        </button>
       </div>
     </li>
   );

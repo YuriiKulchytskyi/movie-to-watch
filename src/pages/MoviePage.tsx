@@ -4,14 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedMovie } from "../redux/movies/moviesSlice";
 import "./MoviePage.scss";
 import { formatedDate } from "../utils/formatedDate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   fetchMovieById,
   fetchSimilarMovies,
 } from "../redux/movies/moviesOperations";
 import { MovieItem } from "../components/MovieList/MovieItem";
+import { removeFromFavorites } from "../utils/removeFromFavorites";
+import { addToFavorites } from "../utils/addToFavorite";
+import { isFavorite } from "../utils/isFavorite";
 
 export const MoviePage = () => {
+  const [favorite, setFavorite] = useState<boolean>(false);
+
   const { id } = useParams<{ id: string }>();
   console.log(id, "Some text");
 
@@ -26,6 +31,16 @@ export const MoviePage = () => {
     }
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (!movie) return;
+
+    const checkFavorite = async () => {
+      const result = await isFavorite(movie.id);
+      setFavorite(result);
+    };
+
+    checkFavorite();
+  }, [movie]);
   if (!movie) return <p className="loading">Loading movie...</p>;
 
   return (
@@ -49,7 +64,21 @@ export const MoviePage = () => {
             loading="lazy"
           />
         )}
+        <button
+          onClick={async (e) => {
+            e.stopPropagation();
 
+            if (favorite) {
+              await removeFromFavorites(movie);
+              setFavorite(false);
+            } else {
+              await addToFavorites(movie);
+              setFavorite(true);
+            }
+          }}
+        >
+          {favorite ? "💔 Remove from Watchlist" : "❤️ Add to Watchlist"}
+        </button>
         <div className="movie-info">
           <h1>{movie.title}</h1>
           {movie.tagline && <p className="tagline">{movie.tagline}</p>}
