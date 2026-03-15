@@ -5,7 +5,7 @@ import { handleLogout } from "../utils/logOut";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "../firebase";
-import "./Pages.scss"
+import "./Pages.scss";
 
 export const Layout = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -22,7 +22,6 @@ export const Layout = () => {
   return (
     <>
       <header className="app-header">
-
         <div className="nav-left">
           <button onClick={() => navigate("/")}>🎬 Movies</button>
         </div>
@@ -33,17 +32,26 @@ export const Layout = () => {
         </div>
 
         <div className="nav-right">
-          <button onClick={() => navigate("/favorites")}>❤️ Favorites</button>
+          {user && (
+            <button onClick={() => navigate("/favorites")}>❤️ Favorites</button>
+          )}
 
           {user ? (
-            <button onClick={handleLogout}>Logout</button>
-          ) : (
-            <button onClick={() => navigate("/auth")}>
-              Sign Up / Log In
+            <button
+              onClick={() => {
+                handleLogout();
+                navigate("/");
+              }}
+            >
+              Logout
             </button>
+          ) : (
+            <>
+              <button onClick={() => navigate("/auth")}>Sign Up</button>
+              <button onClick={() => navigate("/login")}>Log In</button>
+            </>
           )}
         </div>
-
       </header>
 
       <main className="app-content">

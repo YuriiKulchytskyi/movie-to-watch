@@ -1,11 +1,13 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import "./LoginForm.scss";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const navigate = useNavigate();
 
   const handleLogin = async (email: string, password: string) => {
@@ -19,39 +21,49 @@ export const LoginForm = () => {
       const user = userCredential.user;
 
       console.log("Logged in:", user);
+
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
+
   return (
-    <>
+    <div className="login-container">
       <form
+        className="login-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin(email, password);
         }}
       >
-        <label htmlFor="email">
-          Email:
+        <h2>Log In</h2>
+
+        <label>
+          Email
           <input
             type="email"
-            id="email"
             placeholder="Email..."
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </label>
-        <label htmlFor="password">
-          Password:
+
+        <label>
+          Password
           <input
             type="password"
-            id="password"
             placeholder="Password..."
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
+
         <button type="submit">Log In</button>
       </form>
-    </>
+      <p>
+        Don't have an account? <Link to="/auth">Sign up</Link>
+      </p>
+    </div>
   );
 };

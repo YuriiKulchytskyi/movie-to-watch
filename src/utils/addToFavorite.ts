@@ -21,7 +21,6 @@ export const addToFavorites = async (movie: Movie) => {
       vote_average: movie.vote_average,
     });
 
-    console.log("Movie added to favorites", movie);
   } catch (error) {
     console.error(error);
   }

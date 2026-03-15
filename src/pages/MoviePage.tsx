@@ -18,7 +18,6 @@ export const MoviePage = () => {
   const [favorite, setFavorite] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>();
-  console.log(id, "Some text");
 
   const movie = useSelector((state: RootState) => state.movies.movie);
   const dispatch = useDispatch<AppDispatch>();

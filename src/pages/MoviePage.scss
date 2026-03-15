@@ -5,12 +5,12 @@
   font-family: "Inter", "Arial", sans-serif;
   color: #e5e5e5;
   position: relative;
-  background: #111;
+  // background: #111;
 
   .go-back {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    position: fixed;
+    top: 80px;
+    left: 24px;
 
     padding: 8px 16px;
     border-radius: 8px;
@@ -48,7 +48,7 @@
     button {
       position: absolute;
       top: 80px;
-      left: 340px;
+      right: 32px;
 
       padding: 10px 16px;
       border-radius: 8px;
