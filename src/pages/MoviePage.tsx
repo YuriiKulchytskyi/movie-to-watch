@@ -123,16 +123,6 @@ export const MoviePage = () => {
         </div>
       </div>
 
-      {/* {movie.backdrop_path && (
-        <div className="movie-backdrop">
-          <img
-            src={`https://image.tmdb.org/t/p/w780${movie.backdrop_path}`}
-            alt={`${movie.title} backdrop`}
-            loading="lazy"
-          />
-        </div>
-      )} */}
-
       <ul className="similar-list">
         {similar.map((movie) => (
           <MovieItem key={movie.id} item={movie} />

@@ -6,6 +6,7 @@ import { MoviePage } from "./pages/MoviePage";
 import { GenrePage } from "./pages/GenrePage";
 import { AuthPage } from "./pages/AuthPage";
 import { LoginPage } from "./pages/LoginPage";
+import { FavoritesPage } from "./pages/FavoritesPage";
 
 export const router = createBrowserRouter(
   [
@@ -19,11 +20,12 @@ export const router = createBrowserRouter(
         { path: "genres/:id", element: <GenrePage /> },
         { path: "auth", element: <AuthPage /> },
         { path: "login", element: <LoginPage /> },
+        { path: "favorites", element: <FavoritesPage /> },
         { path: "*", element: <h1>404 Not Found</h1> },
       ],
     },
   ],
   {
-    basename: "/movie-to-watch", // <- basename задаємо тут
+    basename: "/movie-to-watch",
   },
 );
