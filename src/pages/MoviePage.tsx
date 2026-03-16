@@ -14,6 +14,8 @@ import { removeFromFavorites } from "../utils/removeFromFavorites";
 import { addToFavorites } from "../utils/addToFavorite";
 import { isFavorite } from "../utils/isFavorite";
 import noPoster from "../images/no-poster.svg";
+import { auth } from "../firebase";
+import toast from "react-hot-toast";
 
 export const MoviePage = () => {
   const [favorite, setFavorite] = useState<boolean>(false);
@@ -56,23 +58,25 @@ export const MoviePage = () => {
       </Link>
 
       <div className="movie-header">
-        
-          <img
-            className="poster"
-            src={
-              movie.poster_path
-                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : noPoster
-            }
-            alt={movie.original_title}
-            loading="lazy"
-          />
-        
+        <img
+          className="poster"
+          src={
+            movie.poster_path
+              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+              : noPoster
+          }
+          alt={movie.original_title}
+          loading="lazy"
+        />
+
         <button
           onClick={async (e) => {
             e.stopPropagation();
 
-            if (favorite) {
+            if (!auth.currentUser) {
+              toast.error("Please log in to manage your watchlist.");
+              return;
+            } else if (favorite) {
               await removeFromFavorites(movie);
               setFavorite(false);
             } else {

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { auth } from "../../firebase";
 import { Link, useNavigate } from "react-router";
 import "./LoginForm.scss";
+import toast from "react-hot-toast";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
@@ -20,11 +21,14 @@ export const LoginForm = () => {
 
       const user = userCredential.user;
 
-      console.log("Logged in:", user);
+      toast.success(`Welcome back, ${user.email}!`);
 
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
+      toast.error("Invalid email or password.");
+      setEmail("");
+      setPassword("");
     }
   };
 

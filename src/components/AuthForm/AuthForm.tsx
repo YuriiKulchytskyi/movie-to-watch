@@ -40,18 +40,18 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       createdAt: new Date(),
     });
 
-    toast.success("Account created successfully 🎉");
-
+    
     setUsername("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-
+    
     navigate('/')
+    toast.success("Account created successfully 🎉");
 
   } catch (error) {
-    toast.error("Failed to create account");
     console.error(error);
+    toast.error("Failed to create account");
   }
 };
 
