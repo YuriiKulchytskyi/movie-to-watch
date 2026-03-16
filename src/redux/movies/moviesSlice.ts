@@ -158,7 +158,6 @@ export const movieSlice = createSlice({
         state.error = null;
         state.loading = false;
         state.similar = action.payload.slice(0, 6);
-        console.log(state.similar);
       });
   },
 });

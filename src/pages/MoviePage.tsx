@@ -9,10 +9,11 @@ import {
   fetchMovieById,
   fetchSimilarMovies,
 } from "../redux/movies/moviesOperations";
-import { MovieItem } from "../components/MovieList/MovieItem";
+import { MovieItem } from "../components/MovieItem/MovieItem";
 import { removeFromFavorites } from "../utils/removeFromFavorites";
 import { addToFavorites } from "../utils/addToFavorite";
 import { isFavorite } from "../utils/isFavorite";
+import noPoster from "../images/no-poster.svg";
 
 export const MoviePage = () => {
   const [favorite, setFavorite] = useState<boolean>(false);
@@ -55,14 +56,18 @@ export const MoviePage = () => {
       </Link>
 
       <div className="movie-header">
-        {movie.poster_path && (
+        
           <img
             className="poster"
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            src={
+              movie.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : noPoster
+            }
             alt={movie.original_title}
             loading="lazy"
           />
-        )}
+        
         <button
           onClick={async (e) => {
             e.stopPropagation();

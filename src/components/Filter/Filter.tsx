@@ -29,7 +29,7 @@ export const Filter = () => {
       />
 
       <button className="search-btn" onClick={handleSearch}>
-        🔍 Search
+        🔍 
       </button>
     </div>
   );

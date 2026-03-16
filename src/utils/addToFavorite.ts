@@ -9,7 +9,6 @@ export const addToFavorites = async (movie: Movie) => {
   const user = auth.currentUser;
 
   if (!user) {
-    console.log("User not logged in");
     return;
   }
 

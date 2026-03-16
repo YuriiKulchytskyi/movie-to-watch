@@ -1,5 +1,5 @@
 import "./MovieList.scss";
-import { MovieItem } from "./MovieItem";
+import { MovieItem } from "../MovieItem/MovieItem";
 import type { Movie } from "../../types/movie";
 
 type Props = {
@@ -12,7 +12,7 @@ export const MovieList = ({ movies, onLoadMore, canLoadMore }: Props) => {
   if (!movies.length) return <p>Loading movies...</p>;
 
   return (
-    <>
+    <div className="list-container">
       <ul className="movieList">
         {movies.map((movie) => (
           <MovieItem key={movie.id} item={movie} />
@@ -20,8 +20,10 @@ export const MovieList = ({ movies, onLoadMore, canLoadMore }: Props) => {
       </ul>
 
       {onLoadMore && canLoadMore && (
-        <button onClick={onLoadMore}>Load More</button>
+        <button className="load-more" onClick={onLoadMore}>
+          Load More
+        </button>
       )}
-    </>
+    </div>
   );
 };

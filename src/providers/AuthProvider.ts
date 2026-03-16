@@ -4,9 +4,7 @@ import { useEffect } from "react";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("User:", user);
-    });
+    const unsubscribe = onAuthStateChanged(auth, () => {});
 
     return () => unsubscribe();
   }, []);

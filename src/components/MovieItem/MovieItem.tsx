@@ -6,6 +6,7 @@ import { removeFromFavorites } from "../../utils/removeFromFavorites";
 import { addToFavorites } from "../../utils/addToFavorite";
 import { auth } from "../../firebase";
 import "./MovieItem.scss";
+import noPoster from "../../images/no-poster.svg";
 
 export const MovieItem = ({ item }: { item: Movie }) => {
   const [favorite, setFavorite] = useState<boolean>(false);
@@ -31,7 +32,11 @@ export const MovieItem = ({ item }: { item: Movie }) => {
       >
         <img
           className="movie-poster"
-          src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+          src={
+            item.poster_path
+              ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+              : noPoster
+          }
           alt={item.original_title}
           loading="lazy"
         />
