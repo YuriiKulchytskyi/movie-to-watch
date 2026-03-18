@@ -1,28 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { Genre, Movie, MoviesResponse } from "../../types/movie";
+import type { FetchMovieError, FetchMovieIdArg, FetchMoviesArg, FetchPopArg, Genre, Movie, MoviesResponse } from "../../types/movie";
 
 const API_URL = import.meta.env.VITE_TMDB_API_URL;
 const BEARER_TOKEN = import.meta.env.VITE_TMDB_BEARER_TOKEN;
 
 axios.defaults.baseURL = API_URL;
 
-type FetchMovieError = {
-  error: string;
-};
 
-type FetchMovieIdArg = {
-  id: number;
-};
-
-type FetchMoviesArg = {
-  query: string;
-  page?: number;
-};
-
-type FetchPopArg ={
-   page?: number;
-}
 
 export const fetchMoviesByQuery = createAsyncThunk<
   MoviesResponse,

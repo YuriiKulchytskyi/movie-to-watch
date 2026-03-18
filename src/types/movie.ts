@@ -33,3 +33,19 @@ export interface MoviesResponse {
     total_pages: number;
     current_page: number;
 }
+export type FetchMovieError = {
+  error: string;
+};
+
+export type FetchMovieIdArg = {
+  id: number;
+};
+
+export type FetchMoviesArg = {
+  query: string;
+  page?: number;
+};
+
+export type FetchPopArg ={
+   page?: number;
+}
